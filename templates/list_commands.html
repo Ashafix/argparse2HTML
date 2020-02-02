@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>
+    Available commands
+</h1>
+{% for cmd, url in args.items() %}
+    <p><a href="{{ url }}">{{ cmd }}</a></p>
+{% endfor %}
+<p>
+
+</p>
+</body>
+</html>

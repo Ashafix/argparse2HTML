@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<style>
+	form  { display: table;      }
+	p     { display: table-row;  }
+	label { display: table-cell; }
+	input { display: table-cell; }
+	div { white-space: pre-line; }
+</style>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Argparser</title>
+</head>
+<body>
+    <h1>
+        Command: {{ title }}
+    </h1>
+    <p>
+        {% if description is not none %}
+        description
+        {% endif %}
+    </p>
+    <form id='argparseForm'>
+
+    {% for arg_name, arg in args.items() %}
+        <p>
+        <label title="{{ arg["help"] }}">{{ arg_name }}:</label>
+        {% if arg['choices'] is none %}
+            <input
+                name="{{ arg_name }}"
+                value="{{ arg["default"] }}"
+                {% if arg["option_strings"]|length  > 0 %}
+                    data-cmdline={{ arg["option_strings"][0]}}
+                {% else %}
+                    data_cmdline=''
+                {% endif %}
+                {% if arg.get("required") %}
+                    required
+                {% endif %}
+
+                {% if arg.get("choices") is not none %}
+                    type = ""
+                {% endif %}
+
+                {% if arg.get("type") is not none %}
+                    {% if arg["type"].find('int') > -1 %}
+                        type="number"
+                    {% else %}
+                        type="text"
+                    {% endif %}
+                {% else %}
+                    type="text"
+                {% endif %}
+            >
+        {% else %}
+            {% for choice in arg["choices"] %}
+                <input
+                    name="{{ arg_name }}"
+                    type="radio"
+                    {% if choice == arg["default"] %}
+                      checked
+                    {% endif %}
+                    value="{{ choice }}"
+
+                    {% if arg["option_strings"]|length  > 0 %}
+                        data-cmdline={{ arg["option_strings"][0]}}
+                    {% else %}
+                        data_cmdline=''
+                    {% endif %}
+                    {% if arg.get("required") %}
+                        required
+                    {% endif %}
+
+                    {% if arg.get("choices") is not none %}
+                        type = ""
+                    {% endif %}
+
+                    {% if arg.get("type") is not none %}
+                        {% if arg["type"].find('int') > -1 %}
+                            type="number"
+                        {% else %}
+                            type="text"
+                        {% endif %}
+                    {% else %}
+                        type="text"
+                    {% endif %}
+                >
+            {{ choice }}
+                <br/>
+            {% endfor %}
+        {% endif %}
+
+        <br/>
+    {% endfor %}
+
+    <input type="submit" id='submitButton' value="Run" />
+    </form>
+
+    <div>
+        <h2>Result</h2>
+        <div id='result'>Nothing submitted yet</div>
+    </div>
+
+    <div>
+        <h2>Log</h2>
+        <div id='log'></div>
+    </div>
+
+</body>
+
+
+<script>
+function handleFormSubmit(event) {
+  event.preventDefault();
+  document.getElementById('submitButton').disabled = true;
+  var elements = Array.from(elementForm.elements);
+  elements = elements.slice(0, elementForm.elements.length -1);
+  cmd = formToString(elements);
+
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.open("POST", "{{ server }}", true);
+  xmlHttp.setRequestHeader( "Content-Type", "application/json" );
+
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState == 4) {
+      var url = '/status/' + xmlHttp.responseText;
+      if (!!window.EventSource) {
+        var source = new EventSource(url);
+        source.onmessage = function(e) {
+          if (!e.data) {
+            source.close();
+            getResult(url);
+            document.getElementById('submitButton').disabled = false;
+          } else {
+            document.getElementById('log').textContent = e.data;
+          }
+        }
+      }
+    }
+  };
+
+  xmlHttp.send(JSON.stringify(cmd));
+};
+
+function getResult(url) {
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.open("GET", url, true);
+  xmlHttp.setRequestHeader("Content-Type", "application/json");
+  xmlHttp.send();
+  xmlHttp.onreadystatechange = function() {
+    document.getElementById('result').textContent = xmlHttp.responseText;
+  }
+}
+
+function formToString(elements) {
+  var cmds = [];
+  elements.forEach(element => {
+    if (element.type === 'radio' && !element.checked) {
+      return;
+    }
+    if (element.value === '') {
+      return;
+    }
+
+    if (element.getAttribute('data-cmdline')) {
+      cmds.push(element.getAttribute('data-cmdline'))
+    }
+    cmds.push(element.value)
+  })
+  return cmds;
+}
+
+var elementForm = document.getElementById('argparseForm');
+elementForm.addEventListener('submit', handleFormSubmit);
+</script>
+
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<title>Server Send Events Demo</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="data">nothing received yet</div>
+</body>
+<script>
+if (!!window.EventSource) {
+  var source = new EventSource('/event');
+  source.onmessage = function(e) {
+    document.getElementById('data').textContent = e.data;
+  }
+}
+</script>
+
+</html>
+
+
+
+
