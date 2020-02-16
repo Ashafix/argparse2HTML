@@ -1,17 +1,11 @@
 <!DOCTYPE html>
-<style>
-	form  { display: table;      }
-	p     { display: table-row;  }
-	label { display: table-cell; }
-	input { display: table-cell; }
-	div { white-space: pre-line; }
-</style>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Argparser</title>
+    <link rel="stylesheet" href="{{ css_url }}">
 </head>
+
 <body>
     <h1>
         Command: {{ title }}
@@ -128,6 +122,7 @@ function handleFormSubmit(event) {
       if (!!window.EventSource) {
         var source = new EventSource(url);
         source.onmessage = function(e) {
+          console.log(e.data);
           if (!e.data) {
             source.close();
             getResult(url);

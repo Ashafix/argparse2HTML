@@ -55,7 +55,8 @@ def show_command_line_options():
     return template.render(title=cli.name,
                            description=cli.parser.description,
                            args=argparser_to_dict(parser),
-                           server=server)
+                           server=server,
+                           css_url=url_for('static', filename='css/main.css'))
 
 
 @app.route('/list')
@@ -67,7 +68,7 @@ def list_available_commands():
     for cmd in sorted(cmds.keys()):
         cmds_sorted[cmd] = cmds[cmd]
 
-    return template.render(args=cmds_sorted)
+    return template.render(args=cmds_sorted, css_url=url_for('static', filename='css/main.css'))
 
 
 @app.route('/refresh')

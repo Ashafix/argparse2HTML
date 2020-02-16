@@ -14,7 +14,7 @@
 
 ## Usage
 
-*  Create a function which takes a `ArgumentParser` namespace as its input and a corresponding `ArgumentParser` object 
+* Create a function which takes a `ArgumentParser` namespace as its input and a corresponding `ArgumentParser` object
   ```
   # our function which needs a GUI                    
   def simple_math(args):
@@ -33,7 +33,6 @@
   parser1.add_argument('--action', help='which method to apply',
                        default='min', choices=['min', 'max', 'sum'],
                        type=str)
-
   ```
 
 * Import the function in `args.py`
@@ -72,6 +71,7 @@
   
 * Register your Python functions and parsers in `args.py`
 * Hot-swap them by opening `/refresh`
+* The layout of the forms can be modified by changing `main.css` in the `static/css` directory
     
 
 
