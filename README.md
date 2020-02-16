@@ -60,7 +60,7 @@
 
 * Execute the Python script
 
-  ![Simle Math function](docs/images/simple_math.PNG "Demonstration")
+  ![Simle Math function](docs/images/demo.gif "Demonstration")
 
 
 ## Configuration
