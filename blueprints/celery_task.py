@@ -72,7 +72,7 @@ class LoggerWriter:
 
     def write(self, message):
         if message != '\n':
-            self.logger.log(self.level, message)
+            self.logger.log(logging.CRITICAL, message)
 
     def flush(self, *kargs, **kwargs):
         pass
