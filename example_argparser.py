@@ -3,7 +3,7 @@ import itertools
 import time
 import builtins
 
-parser1 = argparse.ArgumentParser(prog='simple math', description='a bar')
+parser1 = argparse.ArgumentParser(prog='simple math', description='a simple math command line interface')
 parser1.add_argument('x', help='first value',
                      default='2',
                      type=int)
@@ -22,16 +22,16 @@ parser_cycler.add_argument('--max', help='Number of iterations',
                            default=20,
                            type=int)
 parser_cycler.add_argument('--characters', help='Cycle through those characters',
-                           default='\|/-',
+                           default='\\|/-',
                            type=str)
 
 parser_wrapper = argparse.ArgumentParser(prog='wrapper')
 parser_wrapper.add_argument('columns', help='List of comma separated column names',
-                           default='a,b,c',
-                           type=str)
+                            default='a,b,c',
+                            type=str)
 parser_wrapper.add_argument('values', help='List of comma separated values',
-                           default='1,2,3',
-                           type=str)
+                            default='1,2,3',
+                            type=str)
 
 
 def simple_math(args):
