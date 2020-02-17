@@ -37,7 +37,7 @@ def run_post(command):
 
     f = open(FILENAME_LOG.format(task_id), 'w+')
 
-    p = subprocess.Popen([sys.executable, '-u', '-c', code], stdin=f, stdout=f, bufsize=0)
+    p = subprocess.Popen([sys.executable, '-u', '-c', code], stderr=f, stdout=f, bufsize=0)
     with open(FILENAME_PID.format(task_id), 'w') as ff:
         ff.write(str(p.pid))
     return str(task_id)
