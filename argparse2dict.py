@@ -9,7 +9,7 @@ def argparser_to_dict(parser):
     :return: dict, key: argparser.dest, value: dict with key: argparse.attribute and value: argparse.attribute_value
     """
 
-    args = [a for a in parser._actions if type(a) != argparse._HelpAction]
+    args = [a for a in parser._actions if type(a) not in (argparse._HelpAction, argparse._VersionAction)]
     arg_dict = OrderedDict()
 
     for arg in args:
